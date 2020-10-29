@@ -48,6 +48,13 @@ app.post("/api/workouts", (req, res) => {
         })
 });
 
+app.put("/api/workouts/:id", (req, res) => {
+    Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } }, { new: true })
+        .then(data => {
+            res.json(data);
+        })
+})
+
 // LISTENER
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
