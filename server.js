@@ -41,6 +41,13 @@ app.get("/api/workouts", (req, res) => {
         })
 });
 
+app.post("/api/workouts", (req, res) => {
+    Workout.create(req.body)
+        .then(data => {
+            res.json(data);
+        })
+});
+
 // LISTENER
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
