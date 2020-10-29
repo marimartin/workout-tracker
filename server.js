@@ -3,6 +3,7 @@ const express = require("express");
 const logger = require("morgan");
 const path = require("path");
 const mongoose = require("mongoose");
+const Workout = require("./models/workout")
 
 // PORT
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,14 @@ app.get("/exercise", (req, res) => {
 
 app.get("/stats", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/stats.html"))
+});
+
+// API ROUTES
+app.get("/api/workouts", (req, res) => {
+    Workout.find()
+        .then(data => {
+            res.json(data);
+        })
 });
 
 // LISTENER
