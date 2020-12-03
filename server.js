@@ -20,18 +20,18 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workoutdb", { useNewUrlParser: true });
 
+
 // HTML ROUTES
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/index.html"))
 });
-
 app.get("/exercise", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/exercise.html"))
 });
-
 app.get("/stats", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/stats.html"))
 });
+
 
 // API ROUTES
 app.get("/api/workouts", (req, res) => {
@@ -40,20 +40,25 @@ app.get("/api/workouts", (req, res) => {
             res.json(data);
         })
 });
-
+app.put("/api/workouts/:id", (req, res) => {
+    Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } }, { new: true })
+        .then(data => {
+            res.json(data);
+        })
+});
 app.post("/api/workouts", (req, res) => {
     Workout.create(req.body)
         .then(data => {
             res.json(data);
         })
 });
-
-app.put("/api/workouts/:id", (req, res) => {
-    Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } }, { new: true })
+app.get("/api/workouts/range", (req, res) => {
+    Workout.find({})
         .then(data => {
             res.json(data);
         })
-})
+});
+
 
 // LISTENER
 app.listen(PORT, () => {
